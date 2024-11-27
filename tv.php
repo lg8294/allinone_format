@@ -219,6 +219,19 @@ class M3uParser
         }
     }
 
+    private function dumpItem($item){
+        $str = "";
+        // 判断$item["url"]是否为数组，如果是数组，则循环输出
+        if (is_array($item["url"])) {
+            foreach ($item["url"] as $url) {
+                $str .= sprintf('#EXTINF:%s tvg-id="%s" tvg-name="%s" tvg-logo="%s" group-title="%s",%s%s%s%s', $item["inf"], $item["id"], $item["id"], $item["logo"], $item["group"], $item["desc"], PHP_EOL, $url, PHP_EOL);
+            }
+        } else {
+            $str = sprintf('#EXTINF:%s tvg-id="%s" tvg-name="%s" tvg-logo="%s" group-title="%s",%s%s%s%s', $item["inf"], $item["id"], $item["id"], $item["logo"], $item["group"], $item["desc"], PHP_EOL, $item["url"], PHP_EOL);
+        }
+        return $str;
+    }
+
     private function dumpM3u()
     {
         $str = '#EXTM3U x-tvg-url="https://epg.v1.mk/fy.xml"' . PHP_EOL;
@@ -241,12 +254,14 @@ class M3uParser
                     }
                 }
                 foreach ($tmpM3uDataArrMerge as $item) {
-                    $str .= sprintf('#EXTINF:%s tvg-id="%s" tvg-name="%s" tvg-logo="%s" group-title="%s",%s%s%s%s', $item["inf"], $item["id"], $item["id"], $item["logo"], $groupNew, $item["desc"], PHP_EOL, implode(PHP_EOL, $item["url"]), PHP_EOL);
+                    $str .= $this->dumpItem($item);
+                    // $str .= sprintf('#EXTINF:%s tvg-id="%s" tvg-name="%s" tvg-logo="%s" group-title="%s",%s%s%s%s', $item["inf"], $item["id"], $item["id"], $item["logo"], $groupNew, $item["desc"], PHP_EOL, implode(PHP_EOL, $item["url"]), PHP_EOL);
                 }
             } else {
                 if (isset($this->m3uDataArrFormat[$groupOld])) {
                     foreach ($this->m3uDataArrFormat[$groupOld] as $item) {
-                        $str .= sprintf('#EXTINF:%s tvg-id="%s" tvg-name="%s" tvg-logo="%s" group-title="%s",%s%s%s%s', $item["inf"], $item["id"], $item["id"], $item["logo"], $groupNew, $item["desc"], PHP_EOL, $item["url"], PHP_EOL);
+                        $str .= $this->dumpItem($item);
+                        // $str .= sprintf('#EXTINF:%s tvg-id="%s" tvg-name="%s" tvg-logo="%s" group-title="%s",%s%s%s%s', $item["inf"], $item["id"], $item["id"], $item["logo"], $groupNew, $item["desc"], PHP_EOL, $item["url"], PHP_EOL);
                     }
                 }
             }
