@@ -1,5 +1,5 @@
 <?php
-header('Content-Type: text/html; charset=utf-8');
+header('Content-Type: text/plain; charset=utf-8');
 
 class M3uParser
 {
@@ -224,10 +224,10 @@ class M3uParser
         // 判断$item["url"]是否为数组，如果是数组，则循环输出
         if (is_array($item["url"])) {
             foreach ($item["url"] as $url) {
-                $str .= sprintf('#EXTINF:%s tvg-id="%s" tvg-name="%s" tvg-logo="%s" group-title="%s",%s%s%s%s', $item["inf"], $item["id"], $item["id"], $item["logo"], $item["group"], $item["desc"], PHP_EOL, $url, PHP_EOL);
+                $str .= sprintf('#EXTINF:%s group-title="%s" tvg-id="%s" tvg-name="%s" tvg-logo="%s",%s%s%s%s', $item["inf"], $item["group"], $item["id"], $item["id"], $item["logo"], $item["desc"], PHP_EOL, $url, PHP_EOL);
             }
         } else {
-            $str = sprintf('#EXTINF:%s tvg-id="%s" tvg-name="%s" tvg-logo="%s" group-title="%s",%s%s%s%s', $item["inf"], $item["id"], $item["id"], $item["logo"], $item["group"], $item["desc"], PHP_EOL, $item["url"], PHP_EOL);
+            $str = sprintf('#EXTINF:%s group-title="%s" tvg-id="%s" tvg-name="%s" tvg-logo="%s",%s%s%s%s', $item["inf"], $item["group"], $item["id"], $item["id"], $item["logo"], $item["desc"], PHP_EOL, $item["url"], PHP_EOL);
         }
         return $str;
     }
